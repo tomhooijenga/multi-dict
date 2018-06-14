@@ -66,6 +66,8 @@ export default class  {
             access.set(level, lastKey, entry);
             this._entries.add(entry);
         }
+
+        return this;
     }
 
     /**
@@ -131,7 +133,8 @@ export default class  {
      *
      */
     clear() {
-       access.clear(this._root);
+        this._entries.clear();
+        access.clear(this._root);
     }
 
     /**
@@ -139,7 +142,9 @@ export default class  {
      * @yield {[*, *]}
      */
     *[Symbol.iterator]() {
-        yield* this.entries();
+        for (const entry of this._entries) {
+            yield [entry.keys, entry.value];
+        }
     }
 
     /**
