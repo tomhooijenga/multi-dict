@@ -11,15 +11,17 @@ var _toStringTag = _interopRequireDefault(require("@babel/runtime/core-js/symbol
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-var _getIterator2 = _interopRequireDefault(require("@babel/runtime/core-js/get-iterator"));
-
-var _iterator6 = _interopRequireDefault(require("@babel/runtime/core-js/symbol/iterator"));
+var _iterator7 = _interopRequireDefault(require("@babel/runtime/core-js/symbol/iterator"));
 
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 
 var _entries = _interopRequireDefault(require("@babel/runtime/core-js/object/entries"));
 
-var _weakSet = _interopRequireDefault(require("@babel/runtime/core-js/weak-set"));
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
+
+var _getIterator2 = _interopRequireDefault(require("@babel/runtime/core-js/get-iterator"));
+
+var _set = _interopRequireDefault(require("@babel/runtime/core-js/set"));
 
 var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
 
@@ -42,13 +44,20 @@ var _default =
 /*#__PURE__*/
 function () {
   /**
+   * @param {Iterable.<[*, *]>|object} entries Iterable of [...keys, value] entries, or the options object
    * @param {object} options
    * @param {Function} options.defaultType Constructor for the default type
    * @param {Function[]} options.types Array of constructors
    */
   function _default() {
-    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var entries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     (0, _classCallCheck2.default)(this, _default);
+
+    if (entries === null || entries === undefined) {
+      entries = [];
+    }
+
     this.options = (0, _objectSpread2.default)({}, defaultOptions, options);
     var _this$options = this.options,
         types = _this$options.types,
@@ -61,11 +70,34 @@ function () {
 
     this._root = new rootType();
     /**
-     * @type {WeakSet<Object>}
+     * @type {Set<Object>}
      * @private
      */
 
-    this._entries = new _weakSet.default();
+    this._entries = new _set.default();
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = (0, _getIterator2.default)(entries), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var entry = _step.value;
+        this.set.apply(this, (0, _toConsumableArray2.default)(entry));
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
   }
   /**
    * @param {...*} keys
@@ -76,14 +108,17 @@ function () {
   (0, _createClass2.default)(_default, [{
     key: "set",
     value: function set() {
-      var _this$options2 = this.options,
-          types = _this$options2.types,
-          defaultType = _this$options2.defaultType;
-
       for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
+      if (args.length < 2) {
+        throw new TypeError('Specify at least one key and a value');
+      }
+
+      var _this$options2 = this.options,
+          types = _this$options2.types,
+          defaultType = _this$options2.defaultType;
       var value = args.pop();
       var lastKey = args.pop();
       var level = this._root;
@@ -222,34 +257,34 @@ function () {
      */
 
   }, {
-    key: _iterator6.default,
+    key: _iterator7.default,
     value:
     /*#__PURE__*/
     _regenerator.default.mark(function value() {
-      var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, entry;
+      var _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, entry;
 
       return _regenerator.default.wrap(function value$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _iteratorNormalCompletion = true;
-              _didIteratorError = false;
-              _iteratorError = undefined;
+              _iteratorNormalCompletion2 = true;
+              _didIteratorError2 = false;
+              _iteratorError2 = undefined;
               _context.prev = 3;
-              _iterator = (0, _getIterator2.default)(this._entries);
+              _iterator2 = (0, _getIterator2.default)(this._entries);
 
             case 5:
-              if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+              if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
                 _context.next = 12;
                 break;
               }
 
-              entry = _step.value;
+              entry = _step2.value;
               _context.next = 9;
               return [entry.keys, entry.value];
 
             case 9:
-              _iteratorNormalCompletion = true;
+              _iteratorNormalCompletion2 = true;
               _context.next = 5;
               break;
 
@@ -260,26 +295,26 @@ function () {
             case 14:
               _context.prev = 14;
               _context.t0 = _context["catch"](3);
-              _didIteratorError = true;
-              _iteratorError = _context.t0;
+              _didIteratorError2 = true;
+              _iteratorError2 = _context.t0;
 
             case 18:
               _context.prev = 18;
               _context.prev = 19;
 
-              if (!_iteratorNormalCompletion && _iterator.return != null) {
-                _iterator.return();
+              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+                _iterator2.return();
               }
 
             case 21:
               _context.prev = 21;
 
-              if (!_didIteratorError) {
+              if (!_didIteratorError2) {
                 _context.next = 24;
                 break;
               }
 
-              throw _iteratorError;
+              throw _iteratorError2;
 
             case 24:
               return _context.finish(21);
@@ -304,30 +339,30 @@ function () {
     value:
     /*#__PURE__*/
     _regenerator.default.mark(function entries() {
-      var _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, entry;
+      var _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, entry;
 
       return _regenerator.default.wrap(function entries$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _iteratorNormalCompletion2 = true;
-              _didIteratorError2 = false;
-              _iteratorError2 = undefined;
+              _iteratorNormalCompletion3 = true;
+              _didIteratorError3 = false;
+              _iteratorError3 = undefined;
               _context2.prev = 3;
-              _iterator2 = (0, _getIterator2.default)(this._entries);
+              _iterator3 = (0, _getIterator2.default)(this._entries);
 
             case 5:
-              if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
+              if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
                 _context2.next = 12;
                 break;
               }
 
-              entry = _step2.value;
+              entry = _step3.value;
               _context2.next = 9;
               return [entry.keys, entry.value];
 
             case 9:
-              _iteratorNormalCompletion2 = true;
+              _iteratorNormalCompletion3 = true;
               _context2.next = 5;
               break;
 
@@ -338,26 +373,26 @@ function () {
             case 14:
               _context2.prev = 14;
               _context2.t0 = _context2["catch"](3);
-              _didIteratorError2 = true;
-              _iteratorError2 = _context2.t0;
+              _didIteratorError3 = true;
+              _iteratorError3 = _context2.t0;
 
             case 18:
               _context2.prev = 18;
               _context2.prev = 19;
 
-              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-                _iterator2.return();
+              if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+                _iterator3.return();
               }
 
             case 21:
               _context2.prev = 21;
 
-              if (!_didIteratorError2) {
+              if (!_didIteratorError3) {
                 _context2.next = 24;
                 break;
               }
 
-              throw _iteratorError2;
+              throw _iteratorError3;
 
             case 24:
               return _context2.finish(21);
@@ -382,30 +417,30 @@ function () {
     value:
     /*#__PURE__*/
     _regenerator.default.mark(function keys() {
-      var _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, entry;
+      var _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, entry;
 
       return _regenerator.default.wrap(function keys$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _iteratorNormalCompletion3 = true;
-              _didIteratorError3 = false;
-              _iteratorError3 = undefined;
+              _iteratorNormalCompletion4 = true;
+              _didIteratorError4 = false;
+              _iteratorError4 = undefined;
               _context3.prev = 3;
-              _iterator3 = (0, _getIterator2.default)(this._entries);
+              _iterator4 = (0, _getIterator2.default)(this._entries);
 
             case 5:
-              if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
+              if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
                 _context3.next = 12;
                 break;
               }
 
-              entry = _step3.value;
+              entry = _step4.value;
               _context3.next = 9;
               return entry.keys;
 
             case 9:
-              _iteratorNormalCompletion3 = true;
+              _iteratorNormalCompletion4 = true;
               _context3.next = 5;
               break;
 
@@ -416,26 +451,26 @@ function () {
             case 14:
               _context3.prev = 14;
               _context3.t0 = _context3["catch"](3);
-              _didIteratorError3 = true;
-              _iteratorError3 = _context3.t0;
+              _didIteratorError4 = true;
+              _iteratorError4 = _context3.t0;
 
             case 18:
               _context3.prev = 18;
               _context3.prev = 19;
 
-              if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-                _iterator3.return();
+              if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+                _iterator4.return();
               }
 
             case 21:
               _context3.prev = 21;
 
-              if (!_didIteratorError3) {
+              if (!_didIteratorError4) {
                 _context3.next = 24;
                 break;
               }
 
-              throw _iteratorError3;
+              throw _iteratorError4;
 
             case 24:
               return _context3.finish(21);
@@ -460,30 +495,30 @@ function () {
     value:
     /*#__PURE__*/
     _regenerator.default.mark(function values() {
-      var _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, entry;
+      var _iteratorNormalCompletion5, _didIteratorError5, _iteratorError5, _iterator5, _step5, entry;
 
       return _regenerator.default.wrap(function values$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              _iteratorNormalCompletion4 = true;
-              _didIteratorError4 = false;
-              _iteratorError4 = undefined;
+              _iteratorNormalCompletion5 = true;
+              _didIteratorError5 = false;
+              _iteratorError5 = undefined;
               _context4.prev = 3;
-              _iterator4 = (0, _getIterator2.default)(this._entries);
+              _iterator5 = (0, _getIterator2.default)(this._entries);
 
             case 5:
-              if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
+              if (_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done) {
                 _context4.next = 12;
                 break;
               }
 
-              entry = _step4.value;
+              entry = _step5.value;
               _context4.next = 9;
               return entry.value;
 
             case 9:
-              _iteratorNormalCompletion4 = true;
+              _iteratorNormalCompletion5 = true;
               _context4.next = 5;
               break;
 
@@ -494,26 +529,26 @@ function () {
             case 14:
               _context4.prev = 14;
               _context4.t0 = _context4["catch"](3);
-              _didIteratorError4 = true;
-              _iteratorError4 = _context4.t0;
+              _didIteratorError5 = true;
+              _iteratorError5 = _context4.t0;
 
             case 18:
               _context4.prev = 18;
               _context4.prev = 19;
 
-              if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
-                _iterator4.return();
+              if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
+                _iterator5.return();
               }
 
             case 21:
               _context4.prev = 21;
 
-              if (!_didIteratorError4) {
+              if (!_didIteratorError5) {
                 _context4.next = 24;
                 break;
               }
 
-              throw _iteratorError4;
+              throw _iteratorError5;
 
             case 24:
               return _context4.finish(21);
@@ -542,26 +577,26 @@ function () {
         throw new TypeError(callback + ' is not a function');
       }
 
-      var _iteratorNormalCompletion5 = true;
-      var _didIteratorError5 = false;
-      var _iteratorError5 = undefined;
+      var _iteratorNormalCompletion6 = true;
+      var _didIteratorError6 = false;
+      var _iteratorError6 = undefined;
 
       try {
-        for (var _iterator5 = (0, _getIterator2.default)(this), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-          var entry = _step5.value;
+        for (var _iterator6 = (0, _getIterator2.default)(this), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+          var entry = _step6.value;
           callback.call(thisArg, entry.value, entry.key, this);
         }
       } catch (err) {
-        _didIteratorError5 = true;
-        _iteratorError5 = err;
+        _didIteratorError6 = true;
+        _iteratorError6 = err;
       } finally {
         try {
-          if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
-            _iterator5.return();
+          if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
+            _iterator6.return();
           }
         } finally {
-          if (_didIteratorError5) {
-            throw _iteratorError5;
+          if (_didIteratorError6) {
+            throw _iteratorError6;
           }
         }
       }

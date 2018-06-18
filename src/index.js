@@ -8,11 +8,16 @@ const defaultOptions = {
 
 export default class  {
     /**
+     * @param {Iterable.<[*, *]>|object} entries Iterable of [...keys, value] entries, or the options object
      * @param {object} options
      * @param {Function} options.defaultType Constructor for the default type
      * @param {Function[]} options.types Array of constructors
      */
-    constructor(options = {}) {
+    constructor(entries = [], options = {}) {
+        if (entries === null || entries === undefined) {
+            entries = [];
+        }
+
         this.options = {
             ...defaultOptions,
             ...options
@@ -27,10 +32,14 @@ export default class  {
         this._root = new rootType();
 
         /**
-         * @type {WeakSet<Object>}
+         * @type {Set<Object>}
          * @private
          */
-        this._entries = new WeakSet();
+        this._entries = new Set();
+
+        for (const entry of entries) {
+            this.set(...entry);
+        }
     }
 
     /**
@@ -38,6 +47,10 @@ export default class  {
      * @param {*} value
      */
     set(...args) {
+        if (args.length < 2) {
+            throw new TypeError('Specify at least one key and a value');
+        }
+
         const {types, defaultType} = this.options;
         const value = args.pop();
         const lastKey = args.pop();
