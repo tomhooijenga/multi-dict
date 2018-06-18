@@ -16,6 +16,9 @@ export default class  {
     constructor(entries = [], options = {}) {
         if (entries === null || entries === undefined) {
             entries = [];
+        } else if (typeof entries[Symbol.iterator] !== 'function') {
+            options = entries;
+            entries = [];
         }
 
         this.options = {
@@ -122,6 +125,8 @@ export default class  {
     }
 
     /**
+     * Delete an entry
+     *
      * @param {...*} keys
      * @return {boolean}
      */
@@ -143,7 +148,7 @@ export default class  {
     }
 
     /**
-     *
+     * Remove all entries
      */
     clear() {
         this._entries.clear();
@@ -192,7 +197,7 @@ export default class  {
 
     /**
      * @param {function(*, *[], this):undefined} callback
-     * @param thisArg
+     * @param {*} thisArg Option 'this' context for the callback
      */
     forEach(callback, thisArg = undefined) {
         if (typeof callback !== 'function') {

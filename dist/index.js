@@ -11,8 +11,6 @@ var _toStringTag = _interopRequireDefault(require("@babel/runtime/core-js/symbol
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-var _iterator7 = _interopRequireDefault(require("@babel/runtime/core-js/symbol/iterator"));
-
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 
 var _entries = _interopRequireDefault(require("@babel/runtime/core-js/object/entries"));
@@ -24,6 +22,8 @@ var _getIterator2 = _interopRequireDefault(require("@babel/runtime/core-js/get-i
 var _set = _interopRequireDefault(require("@babel/runtime/core-js/set"));
 
 var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
+
+var _iterator7 = _interopRequireDefault(require("@babel/runtime/core-js/symbol/iterator"));
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
@@ -55,6 +55,9 @@ function () {
     (0, _classCallCheck2.default)(this, _default);
 
     if (entries === null || entries === undefined) {
+      entries = [];
+    } else if (typeof entries[_iterator7.default] !== 'function') {
+      options = entries;
       entries = [];
     }
 
@@ -214,6 +217,8 @@ function () {
       return true;
     }
     /**
+     * Delete an entry
+     *
      * @param {...*} keys
      * @return {boolean}
      */
@@ -241,7 +246,7 @@ function () {
       return _access.default.delete(leaf, lastKey);
     }
     /**
-     *
+     * Remove all entries
      */
 
   }, {
@@ -565,7 +570,7 @@ function () {
     })
     /**
      * @param {function(*, *[], this):undefined} callback
-     * @param thisArg
+     * @param {*} thisArg Option 'this' context for the callback
      */
 
   }, {

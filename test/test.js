@@ -36,3 +36,12 @@ it('constructor iterable', () => {
 
     Dict.prototype.set.restore();
 });
+
+it('constructor options', () => {
+    const dict = new Dict({
+        defaultType: Object
+    });
+
+    dict.size.should.equal(0);
+    dict.options.defaultType.should.equal(Object);
+});

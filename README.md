@@ -8,7 +8,16 @@ The aim of multi-dict is to behave just like a set of nested maps, but with an e
 import MultiDict from '@teamawesome/multi-dict'
 
 const dict = new MultiDict();
+```
 
+## Parameters
+* `entries` Optional. An iterable whose elements are in the shape of `[key1, ..., value]`. Each element is added to 
+the dict.
+* `options` Optional. A hash of options as specified in the options paragraph.
+```
+new Dict([ /* Entries */ ], { /* Options */ });
+new Dict([ /* Entries */ ]);
+new Dict({ /* Options */ });
 ```
 ## Options
 By default, for each level of the dict a Map is used. However, you can specify a type for each level and/or a 
@@ -29,12 +38,12 @@ new MultiDict({
 ```
 
 ## Methods
-* `get` Get a value by it's path
-* `set` Set a value by a path of keys
-* `has` Check if a path of keys exists
-* `delete` Delete a path of keys
+* `get(...keys)` Get a value by it's path
+* `set(...keys, value)` Set a value by a path of keys
+* `has(...keys)` Check if a path of keys exists
+* `delete(...keys)` Delete a path of keys
 * `clear` Remove all entries in the dict
-* `forEach` Run a callback for each entry of the dict
+* `forEach(callback, thisArg)` Run a callback for each entry of the dict
 ```
 dict.set(key1, key2, value);
 dict.get(key1, key2); // => value
