@@ -11,19 +11,19 @@ var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/cl
 
 var _default =
 /**
- * @param {*[]} keys
- * @param {*} value
- */
+   * @param {*[]} keys
+   * @param {*} value
+   */
 function _default(keys, value) {
   (0, _classCallCheck2.default)(this, _default);
 
   /**
-   * @type {*[]}
-   */
+       * @type {*[]}
+       */
   this.keys = keys;
   /**
-   * @type {*}
-   */
+       * @type {*}
+       */
 
   this.value = value;
 };

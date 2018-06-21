@@ -1,16 +1,16 @@
 export default class {
-    /**
+  /**
      * @param {*[]} keys
      * @param {*} value
      */
-    constructor(keys, value) {
-        /**
+  constructor(keys, value) {
+    /**
          * @type {*[]}
          */
-        this.keys = keys;
-        /**
+    this.keys = keys;
+    /**
          * @type {*}
          */
-        this.value = value;
-    }
+    this.value = value;
+  }
 }

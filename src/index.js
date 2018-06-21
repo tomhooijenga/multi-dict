@@ -1,222 +1,228 @@
 import access from '@teamawesome/access';
-import Entry from './entry';
+import Item from './item';
 
 const defaultOptions = {
-    defaultType: Map,
-    types: [],
+  defaultType: Map,
+  types: [],
 };
 
-export default class  {
-    /**
-     * @param {Iterable.<[*, *]>|object} entries Iterable of [...keys, value] entries, or the options object
-     * @param {object} options
-     * @param {Function} options.defaultType Constructor for the default type
-     * @param {Function[]} options.types Array of constructors
-     */
-    constructor(entries = [], options = {}) {
-        if (entries === null || entries === undefined) {
-            entries = [];
-        } else if (typeof entries[Symbol.iterator] !== 'function') {
-            options = entries;
-            entries = [];
-        }
-
-        this.options = {
-            ...defaultOptions,
-            ...options
-        };
-        const {types, defaultType} = this.options;
-
-        const rootType = types.shift() || defaultType;
-        /**
-         * @type {*}
-         * @private
-         */
-        this._root = new rootType();
-
-        /**
-         * @type {Set<Object>}
-         * @private
-         */
-        this._entries = new Set();
-
-        for (const entry of entries) {
-            this.set(...entry);
-        }
+class MultiDict {
+  /**
+   * @param {Iterable.<[*, *]>|object} entries Iterable of [...keys, value]
+   *                                           entries, or the options object
+   * @param {object} options
+   * @param {Function} options.defaultType Constructor for the default type
+   * @param {Function[]} options.types Array of constructors
+   */
+  constructor(entries = [], options = {}) {
+    if (entries === null || entries === undefined) {
+      entries = [];
+    } else if (typeof entries[Symbol.iterator] !== 'function') {
+      options = entries;
+      entries = [];
     }
+
+    this.options = {
+      ...defaultOptions,
+      ...options,
+    };
+    const { types, defaultType } = this.options;
+
+    const Type = types.shift() || defaultType;
+    /**
+     * @type {*}
+     * @private
+     */
+    this.root = new Type();
 
     /**
-     * @param {...*} keys
-     * @param {*} value
+     * @type {Set<Object>}
+     * @private
      */
-    set(...args) {
-        if (args.length < 2) {
-            throw new TypeError('Specify at least one key and a value');
-        }
+    this.items = new Set();
 
-        const {types, defaultType} = this.options;
-        const value = args.pop();
-        const lastKey = args.pop();
+    for (const entry of entries) {
+      this.set(...entry);
+    }
+  }
 
-        let level = this._root;
-        let nextLevel;
-        for (const [index, key] of Object.entries(args)) {
-            nextLevel = access.get(level, key);
+  /**
+   * @return {number}
+   */
+  get size() {
+    return this.items.size;
+  }
 
-            if (nextLevel === undefined) {
-                const levelType = types[index] || defaultType;
-                nextLevel = new levelType();
+  /**
+   * @return {string}
+   */
+  get [Symbol.toStringTag]() {
+    return 'MultiDict';
+  }
 
-                access.set(level, key, nextLevel);
-            }
-
-            level = nextLevel;
-        }
-
-        const prevValue = access.get(level, lastKey);
-
-        if (prevValue instanceof Entry) {
-            prevValue.value = value;
-        } else {
-            const entry = new Entry(args, value);
-            access.set(level, lastKey, entry);
-            this._entries.add(entry);
-        }
-
-        return this;
+  /**
+   * @param {...*} keys
+   * @param {*} value
+   */
+  set(...args) {
+    if (args.length < 2) {
+      throw new TypeError('Specify at least one key and a value');
     }
 
-    /**
-     * @param {...*} keys
-     * @return {*}
-     */
-    get(...keys) {
-        let level = this._root;
-        for (const key of keys) {
-            if (!access.has(level, key)) {
-                return undefined;
-            }
+    const { types, defaultType } = this.options;
+    const value = args.pop();
+    const lastKey = args.pop();
 
-            level = access.get(level, key);
-        }
+    let level = this.root;
+    let nextLevel;
+    for (const [index, key] of Object.entries(args)) {
+      nextLevel = access.get(level, key);
 
-        if (level instanceof Entry) {
-            return level.value;
-        }
+      if (nextLevel === undefined) {
+        const Type = types[index] || defaultType;
+        nextLevel = new Type();
 
-        return level;
+        access.set(level, key, nextLevel);
+      }
+
+      level = nextLevel;
     }
 
-    /**
-     * @param {...*} keys
-     * @return {boolean}
-     */
-    has(...keys) {
-        let level = this._root;
-        for (const key of keys) {
-            if (!access.has(level, key)) {
-                return false;
-            }
+    const prevValue = access.get(level, lastKey);
 
-            level = access.get(level, key);
-        }
-
-        return true;
+    if (prevValue instanceof Item) {
+      prevValue.value = value;
+    } else {
+      const entry = new Item(args, value);
+      access.set(level, lastKey, entry);
+      this.items.add(entry);
     }
 
-    /**
-     * Delete an entry
-     *
-     * @param {...*} keys
-     * @return {boolean}
-     */
-    delete(...keys) {
-        const lastKey = keys.pop();
-        const leaf = this.get(keys);
+    return this;
+  }
 
-        if (leaf === undefined) {
-            return false;
-        }
+  /**
+   * @param {...*} keys
+   * @return {*}
+   */
+  get(...keys) {
+    let level = this.root;
+    for (const key of keys) {
+      if (!access.has(level, key)) {
+        return undefined;
+      }
 
-        const lastValue = access.get(leaf, lastKey);
-
-        if (lastValue instanceof Entry) {
-            this._entries.delete(lastValue);
-        }
-
-        return access.delete(leaf, lastKey);
+      level = access.get(level, key);
     }
 
-    /**
-     * Remove all entries
-     */
-    clear() {
-        this._entries.clear();
-        access.clear(this._root);
+    if (level instanceof Item) {
+      return level.value;
     }
 
-    /**
-     * @generator
-     * @yield {[*, *]}
-     */
-    *[Symbol.iterator]() {
-        for (const entry of this._entries) {
-            yield [entry.keys, entry.value];
-        }
+    return level;
+  }
+
+  /**
+   * @param {...*} keys
+   * @return {boolean}
+   */
+  has(...keys) {
+    let level = this.root;
+    for (const key of keys) {
+      if (!access.has(level, key)) {
+        return false;
+      }
+
+      level = access.get(level, key);
     }
 
-    /**
-     * @generator
-     * @yield {[*, *]}
-     */
-    *entries() {
-        for (const entry of this._entries) {
-            yield [entry.keys, entry.value];
-        }
+    return true;
+  }
+
+  /**
+   * Delete an entry
+   *
+   * @param {...*} keys
+   * @return {boolean}
+   */
+  delete(...keys) {
+    const lastKey = keys.pop();
+    const leaf = this.get(keys);
+
+    if (leaf === undefined) {
+      return false;
     }
 
-    /**
-     * @generator
-     * @yield {*}
-     */
-    *keys() {
-        for (const entry of this._entries) {
-            yield entry.keys;
-        }
+    const lastValue = access.get(leaf, lastKey);
+
+    if (lastValue instanceof Item) {
+      this.items.delete(lastValue);
     }
 
-    /**
-     * @generator
-     * @yield {*}
-     */
-    *values() {
-        for (const entry of this._entries) {
-            yield entry.value;
-        }
+    return access.delete(leaf, lastKey);
+  }
+
+  /**
+   * Remove all entries
+   */
+  clear() {
+    this.items.clear();
+    access.clear(this.root);
+  }
+
+  /**
+   * @generator
+   * @yield {[*, *]}
+   */
+  * [Symbol.iterator]() {
+    for (const entry of this.items) {
+      yield [entry.keys, entry.value];
+    }
+  }
+
+  /**
+   * @generator
+   * @yield {[*, *]}
+   */
+  * entries() {
+    for (const entry of this.items) {
+      yield [entry.keys, entry.value];
+    }
+  }
+
+  /**
+   * @generator
+   * @yield {*}
+   */
+  * keys() {
+    for (const entry of this.items) {
+      yield entry.keys;
+    }
+  }
+
+  /**
+   * @generator
+   * @yield {*}
+   */
+  * values() {
+    for (const entry of this.items) {
+      yield entry.value;
+    }
+  }
+
+  /**
+   * @param {function(*, *[], this):undefined} callback
+   * @param {*} thisArg Option 'this' context for the callback
+   */
+  forEach(callback, thisArg = undefined) {
+    if (typeof callback !== 'function') {
+      throw new TypeError(`${callback} is not a function`);
     }
 
-    /**
-     * @param {function(*, *[], this):undefined} callback
-     * @param {*} thisArg Option 'this' context for the callback
-     */
-    forEach(callback, thisArg = undefined) {
-        if (typeof callback !== 'function') {
-            throw new TypeError(callback + ' is not a function');
-        }
-
-        for(const entry of this) {
-            callback.call(thisArg, entry.value, entry.key, this);
-        }
+    for (const entry of this) {
+      callback.call(thisArg, entry.value, entry.key, this);
     }
-
-    /**
-     * @return {string}
-     */
-    [Symbol.toStringTag]() {
-        return '[object MultiDict]';
-    }
-
-    get size() {
-        return this._entries.size;
-    }
+  }
 }
+
+export default MultiDict;

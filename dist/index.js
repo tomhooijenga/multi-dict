@@ -33,26 +33,27 @@ var _map = _interopRequireDefault(require("@babel/runtime/core-js/map"));
 
 var _access = _interopRequireDefault(require("@teamawesome/access"));
 
-var _entry = _interopRequireDefault(require("./entry"));
+var _item = _interopRequireDefault(require("./item"));
 
 var defaultOptions = {
   defaultType: _map.default,
   types: []
 };
 
-var _default =
+var MultiDict =
 /*#__PURE__*/
 function () {
   /**
-   * @param {Iterable.<[*, *]>|object} entries Iterable of [...keys, value] entries, or the options object
+   * @param {Iterable.<[*, *]>|object} entries Iterable of [...keys, value]
+   *                                           entries, or the options object
    * @param {object} options
    * @param {Function} options.defaultType Constructor for the default type
    * @param {Function[]} options.types Array of constructors
    */
-  function _default() {
+  function MultiDict() {
     var entries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    (0, _classCallCheck2.default)(this, _default);
+    (0, _classCallCheck2.default)(this, MultiDict);
 
     if (entries === null || entries === undefined) {
       entries = [];
@@ -65,19 +66,19 @@ function () {
     var _this$options = this.options,
         types = _this$options.types,
         defaultType = _this$options.defaultType;
-    var rootType = types.shift() || defaultType;
+    var Type = types.shift() || defaultType;
     /**
      * @type {*}
      * @private
      */
 
-    this._root = new rootType();
+    this.root = new Type();
     /**
      * @type {Set<Object>}
      * @private
      */
 
-    this._entries = new _set.default();
+    this.items = new _set.default();
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
@@ -103,13 +104,17 @@ function () {
     }
   }
   /**
-   * @param {...*} keys
-   * @param {*} value
+   * @return {number}
    */
 
 
-  (0, _createClass2.default)(_default, [{
+  (0, _createClass2.default)(MultiDict, [{
     key: "set",
+
+    /**
+     * @param {...*} keys
+     * @param {*} value
+     */
     value: function set() {
       for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
@@ -124,7 +129,7 @@ function () {
           defaultType = _this$options2.defaultType;
       var value = args.pop();
       var lastKey = args.pop();
-      var level = this._root;
+      var level = this.root;
       var nextLevel;
 
       var _arr = (0, _entries.default)(args);
@@ -137,8 +142,8 @@ function () {
         nextLevel = _access.default.get(level, key);
 
         if (nextLevel === undefined) {
-          var levelType = types[index] || defaultType;
-          nextLevel = new levelType();
+          var Type = types[index] || defaultType;
+          nextLevel = new Type();
 
           _access.default.set(level, key, nextLevel);
         }
@@ -148,14 +153,14 @@ function () {
 
       var prevValue = _access.default.get(level, lastKey);
 
-      if (prevValue instanceof _entry.default) {
+      if (prevValue instanceof _item.default) {
         prevValue.value = value;
       } else {
-        var entry = new _entry.default(args, value);
+        var entry = new _item.default(args, value);
 
         _access.default.set(level, lastKey, entry);
 
-        this._entries.add(entry);
+        this.items.add(entry);
       }
 
       return this;
@@ -168,7 +173,7 @@ function () {
   }, {
     key: "get",
     value: function get() {
-      var level = this._root;
+      var level = this.root;
 
       for (var _len2 = arguments.length, keys = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
         keys[_key2] = arguments[_key2];
@@ -184,7 +189,7 @@ function () {
         level = _access.default.get(level, key);
       }
 
-      if (level instanceof _entry.default) {
+      if (level instanceof _item.default) {
         return level.value;
       }
 
@@ -198,7 +203,7 @@ function () {
   }, {
     key: "has",
     value: function has() {
-      var level = this._root;
+      var level = this.root;
 
       for (var _len3 = arguments.length, keys = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
         keys[_key3] = arguments[_key3];
@@ -239,8 +244,8 @@ function () {
 
       var lastValue = _access.default.get(leaf, lastKey);
 
-      if (lastValue instanceof _entry.default) {
-        this._entries.delete(lastValue);
+      if (lastValue instanceof _item.default) {
+        this.items.delete(lastValue);
       }
 
       return _access.default.delete(leaf, lastKey);
@@ -252,9 +257,9 @@ function () {
   }, {
     key: "clear",
     value: function clear() {
-      this._entries.clear();
+      this.items.clear();
 
-      _access.default.clear(this._root);
+      _access.default.clear(this.root);
     }
     /**
      * @generator
@@ -276,7 +281,7 @@ function () {
               _didIteratorError2 = false;
               _iteratorError2 = undefined;
               _context.prev = 3;
-              _iterator2 = (0, _getIterator2.default)(this._entries);
+              _iterator2 = (0, _getIterator2.default)(this.items);
 
             case 5:
               if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
@@ -354,7 +359,7 @@ function () {
               _didIteratorError3 = false;
               _iteratorError3 = undefined;
               _context2.prev = 3;
-              _iterator3 = (0, _getIterator2.default)(this._entries);
+              _iterator3 = (0, _getIterator2.default)(this.items);
 
             case 5:
               if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
@@ -432,7 +437,7 @@ function () {
               _didIteratorError4 = false;
               _iteratorError4 = undefined;
               _context3.prev = 3;
-              _iterator4 = (0, _getIterator2.default)(this._entries);
+              _iterator4 = (0, _getIterator2.default)(this.items);
 
             case 5:
               if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
@@ -510,7 +515,7 @@ function () {
               _didIteratorError5 = false;
               _iteratorError5 = undefined;
               _context4.prev = 3;
-              _iterator5 = (0, _getIterator2.default)(this._entries);
+              _iterator5 = (0, _getIterator2.default)(this.items);
 
             case 5:
               if (_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done) {
@@ -579,7 +584,7 @@ function () {
       var thisArg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 
       if (typeof callback !== 'function') {
-        throw new TypeError(callback + ' is not a function');
+        throw new TypeError("".concat(callback, " is not a function"));
       }
 
       var _iteratorNormalCompletion6 = true;
@@ -606,22 +611,23 @@ function () {
         }
       }
     }
+  }, {
+    key: "size",
+    get: function get() {
+      return this.items.size;
+    }
     /**
      * @return {string}
      */
 
   }, {
     key: _toStringTag.default,
-    value: function value() {
-      return '[object MultiDict]';
-    }
-  }, {
-    key: "size",
     get: function get() {
-      return this._entries.size;
+      return 'MultiDict';
     }
   }]);
-  return _default;
+  return MultiDict;
 }();
 
+var _default = MultiDict;
 exports.default = _default;
