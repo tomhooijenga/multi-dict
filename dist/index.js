@@ -7,36 +7,24 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _toStringTag = _interopRequireDefault(require("@babel/runtime/core-js/symbol/to-string-tag"));
-
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 
-var _entries = _interopRequireDefault(require("@babel/runtime/core-js/object/entries"));
-
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
 
-var _getIterator2 = _interopRequireDefault(require("@babel/runtime/core-js/get-iterator"));
-
-var _set = _interopRequireDefault(require("@babel/runtime/core-js/set"));
-
 var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
-
-var _iterator7 = _interopRequireDefault(require("@babel/runtime/core-js/symbol/iterator"));
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
-
-var _map = _interopRequireDefault(require("@babel/runtime/core-js/map"));
 
 var _access = _interopRequireDefault(require("@teamawesome/access"));
 
 var _item = _interopRequireDefault(require("./item"));
 
 var defaultOptions = {
-  defaultType: _map.default,
+  defaultType: Map,
   types: []
 };
 
@@ -57,7 +45,7 @@ function () {
 
     if (entries === null || entries === undefined) {
       entries = [];
-    } else if (typeof entries[_iterator7.default] !== 'function') {
+    } else if (typeof entries[Symbol.iterator] !== 'function') {
       options = entries;
       entries = [];
     }
@@ -78,13 +66,13 @@ function () {
      * @private
      */
 
-    this.items = new _set.default();
+    this.items = new Set();
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
 
     try {
-      for (var _iterator = (0, _getIterator2.default)(entries), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      for (var _iterator = entries[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         var entry = _step.value;
         this.set.apply(this, (0, _toConsumableArray2.default)(entry));
       }
@@ -132,7 +120,7 @@ function () {
       var level = this.root;
       var nextLevel;
 
-      var _arr = (0, _entries.default)(args);
+      var _arr = Object.entries(args);
 
       for (var _i = 0; _i < _arr.length; _i++) {
         var _arr$_i = (0, _slicedToArray2.default)(_arr[_i], 2),
@@ -267,7 +255,7 @@ function () {
      */
 
   }, {
-    key: _iterator7.default,
+    key: Symbol.iterator,
     value:
     /*#__PURE__*/
     _regenerator.default.mark(function value() {
@@ -281,7 +269,7 @@ function () {
               _didIteratorError2 = false;
               _iteratorError2 = undefined;
               _context.prev = 3;
-              _iterator2 = (0, _getIterator2.default)(this.items);
+              _iterator2 = this.items[Symbol.iterator]();
 
             case 5:
               if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
@@ -359,7 +347,7 @@ function () {
               _didIteratorError3 = false;
               _iteratorError3 = undefined;
               _context2.prev = 3;
-              _iterator3 = (0, _getIterator2.default)(this.items);
+              _iterator3 = this.items[Symbol.iterator]();
 
             case 5:
               if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
@@ -437,7 +425,7 @@ function () {
               _didIteratorError4 = false;
               _iteratorError4 = undefined;
               _context3.prev = 3;
-              _iterator4 = (0, _getIterator2.default)(this.items);
+              _iterator4 = this.items[Symbol.iterator]();
 
             case 5:
               if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
@@ -515,7 +503,7 @@ function () {
               _didIteratorError5 = false;
               _iteratorError5 = undefined;
               _context4.prev = 3;
-              _iterator5 = (0, _getIterator2.default)(this.items);
+              _iterator5 = this.items[Symbol.iterator]();
 
             case 5:
               if (_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done) {
@@ -592,7 +580,7 @@ function () {
       var _iteratorError6 = undefined;
 
       try {
-        for (var _iterator6 = (0, _getIterator2.default)(this), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+        for (var _iterator6 = this[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
           var entry = _step6.value;
           callback.call(thisArg, entry.value, entry.key, this);
         }
@@ -621,7 +609,7 @@ function () {
      */
 
   }, {
-    key: _toStringTag.default,
+    key: Symbol.toStringTag,
     get: function get() {
       return 'MultiDict';
     }
