@@ -169,12 +169,11 @@ function () {
 
       for (var _i2 = 0; _i2 < keys.length; _i2++) {
         var key = keys[_i2];
+        level = _access.default.get(level, key);
 
-        if (!_access.default.has(level, key)) {
+        if (level === undefined) {
           return undefined;
         }
-
-        level = _access.default.get(level, key);
       }
 
       if (level instanceof _item.default) {

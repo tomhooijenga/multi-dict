@@ -108,11 +108,11 @@ class MultiDict {
   get(...keys) {
     let level = this.root;
     for (const key of keys) {
-      if (!access.has(level, key)) {
+      level = access.get(level, key);
+
+      if (level === undefined) {
         return undefined;
       }
-
-      level = access.get(level, key);
     }
 
     if (level instanceof Item) {
