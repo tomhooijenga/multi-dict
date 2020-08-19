@@ -9,23 +9,23 @@ exports["default"] = void 0;
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
-var _default =
+var Item =
 /**
    * @param {*[]} keys
    * @param {*} value
    */
-function _default(keys, value) {
-  (0, _classCallCheck2["default"])(this, _default);
+function Item(keys, value) {
+  (0, _classCallCheck2["default"])(this, Item);
 
   /**
-       * @type {*[]}
-       */
+    * @type {*[]}
+    */
   this.keys = keys;
   /**
-       * @type {*}
-       */
+    * @type {*}
+    */
 
   this.value = value;
 };
 
-exports["default"] = _default;
+exports["default"] = Item;

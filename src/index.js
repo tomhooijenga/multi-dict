@@ -1,42 +1,19 @@
-import access from '@teamawesome/access';
 import Item from './item';
+import Tree from './tree';
 
-const defaultOptions = {
-  defaultType: Map,
-  types: [],
-};
-
-class MultiDict {
+export default class MultiDict {
   /**
-   * @param {Iterable|object} entries Iterable of [...keys, value]
-   *                                  entries, or the options object
-   * @param {object} options
-   * @param {Function} options.defaultType Constructor for the default type
-   * @param {Function[]} options.types Array of constructors
+   * @param {Iterable|object} entries Iterable of [...keys, value] entries.
    */
-  constructor(entries = [], options = {}) {
-    if (entries === null || entries === undefined) {
-      entries = [];
-    } else if (typeof entries[Symbol.iterator] !== 'function') {
-      options = entries;
-      entries = [];
-    }
-
-    this.options = {
-      ...defaultOptions,
-      ...options,
-    };
-    const { types, defaultType } = this.options;
-
-    const Type = types.shift() || defaultType;
+  constructor(entries = []) {
     /**
-     * @type {*}
+     * @type {Tree}
      * @private
      */
-    this.root = new Type();
+    this.tree = new Tree();
 
     /**
-     * @type {Set<Object>}
+     * @type {Set<Item>}
      * @private
      */
     this.items = new Set();
@@ -61,106 +38,70 @@ class MultiDict {
   }
 
   /**
+   * Set a value.
+   *
    * @param {...*} keys
    * @param {*} value
    * @return {MultiDict}
    */
-  set(...args) {
-    if (args.length < 2) {
-      throw new TypeError('Specify at least one key and a value');
-    }
+  set(...keys) {
+    const value = keys.pop();
 
-    const { types, defaultType } = this.options;
-    const value = args.pop();
-    const lastKey = args.pop();
+    const oldItem = this.tree.get(keys);
 
-    let level = this.root;
-    let nextLevel;
-    for (const [index, key] of Object.entries(args)) {
-      nextLevel = access.get(level, key);
-
-      if (nextLevel === undefined) {
-        const Type = types[index] || defaultType;
-        nextLevel = new Type();
-
-        access.set(level, key, nextLevel);
-      }
-
-      level = nextLevel;
-    }
-
-    const prevValue = access.get(level, lastKey);
-
-    if (prevValue instanceof Item) {
-      prevValue.value = value;
+    // Overwrite item
+    if (oldItem) {
+      oldItem.value = value;
     } else {
-      const entry = new Item(args, value);
-      access.set(level, lastKey, entry);
-      this.items.add(entry);
+      const newItem = new Item(keys, value);
+      this.tree.set(keys, newItem);
+      this.items.add(newItem);
     }
 
     return this;
   }
 
   /**
+   * Get an entry or undefined if it wasn't added.
+   *
    * @param {...*} keys
-   * @return {*}
+   * @return {*|undefined}
    */
   get(...keys) {
-    let level = this.root;
-    for (const key of keys) {
-      level = access.get(level, key);
+    const item = this.tree.get(keys);
 
-      if (level === undefined) {
-        return undefined;
-      }
+    if (item === undefined) {
+      return undefined;
     }
 
-    if (level instanceof Item) {
-      return level.value;
-    }
-
-    return level;
+    return item.value;
   }
 
   /**
+   * Check if an entry exists. Always false for partial key paths.
+   *
    * @param {...*} keys
    * @return {boolean}
    */
   has(...keys) {
-    let level = this.root;
-    for (const key of keys) {
-      if (!access.has(level, key)) {
-        return false;
-      }
-
-      level = access.get(level, key);
-    }
-
-    return true;
+    return this.tree.has(keys);
   }
 
   /**
-   * Delete an entry
+   * Delete an entry.
    *
    * @param {...*} keys
    * @return {boolean}
    */
   delete(...keys) {
-    const lastKey = keys.pop();
-    const leaf = this.get(keys);
+    const item = this.tree.get(keys);
 
-    if (leaf === undefined) {
+    if (item === undefined) {
       return false;
     }
 
-    const lastValue = access.get(leaf, lastKey);
-
-    if (lastValue instanceof Item) {
-      this.items.delete(lastValue);
-    }
-
-    return access.delete(leaf, lastKey);
+    this.items.delete(item);
+    return this.tree.delete(keys);
   }
 
   /**
@@ -168,12 +109,14 @@ class MultiDict {
    */
   clear() {
     this.items.clear();
-    access.clear(this.root);
+    this.tree.clear();
   }
 
   /**
+   * Get an iterator for each of the entries.
+   *
    * @generator
-   * @yield {[*, *]}
+   * @yield {[*[], *]}
    */
   * [Symbol.iterator]() {
     for (const entry of this.items) {
@@ -182,8 +125,10 @@ class MultiDict {
   }
 
   /**
+   * Get an iterator for each of the entries.
+   *
    * @generator
-   * @yield {[*, *]}
+   * @yield {[*[], *]}
    */
   * entries() {
     for (const entry of this.items) {
@@ -192,8 +137,10 @@ class MultiDict {
   }
 
   /**
+   * Get an iterator for each of the keys.
+   *
    * @generator
-   * @yield {*}
+   * @yield {*[]}
    */
   * keys() {
     for (const entry of this.items) {
@@ -202,6 +149,8 @@ class MultiDict {
   }
 
   /**
+   * Get an iterator for each of the values.
+   *
    * @generator
    * @yield {*}
    */
@@ -212,6 +161,8 @@ class MultiDict {
   }
 
   /**
+   * Call a callback for each of the registered entries.
+   *
    * @param {function(*, *[], this):undefined} callback
    * @param {*} thisArg Option 'this' context for the callback
    */
@@ -220,10 +171,8 @@ class MultiDict {
       throw new TypeError(`${callback} is not a function`);
     }
 
-    for (const entry of this) {
-      callback.call(thisArg, entry.value, entry.key, this);
+    for (const [keys, value] of this) {
+      callback.call(thisArg, value, keys, this);
     }
   }
 }
-
-export default MultiDict;

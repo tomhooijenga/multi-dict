@@ -7,21 +7,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports["default"] = void 0;
 
-var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
-
 var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
 
-var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
 var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));
 
-var _access = _interopRequireDefault(require("@teamawesome/access"));
-
 var _item = _interopRequireDefault(require("./item"));
+
+var _tree = _interopRequireDefault(require("./tree"));
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
@@ -29,48 +27,21 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-var defaultOptions = {
-  defaultType: Map,
-  types: []
-};
-
 var MultiDict = /*#__PURE__*/function () {
   /**
-   * @param {Iterable.<[*, *]>|object} entries Iterable of [...keys, value]
-   *                                           entries, or the options object
-   * @param {object} options
-   * @param {Function} options.defaultType Constructor for the default type
-   * @param {Function[]} options.types Array of constructors
+   * @param {Iterable|object} entries Iterable of [...keys, value] entries.
    */
   function MultiDict() {
     var entries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     (0, _classCallCheck2["default"])(this, MultiDict);
 
-    if (entries === null || entries === undefined) {
-      entries = [];
-    } else if (typeof entries[Symbol.iterator] !== 'function') {
-      options = entries;
-      entries = [];
-    }
-
-    this.options = _objectSpread(_objectSpread({}, defaultOptions), options);
-    var _this$options = this.options,
-        types = _this$options.types,
-        defaultType = _this$options.defaultType;
-    var Type = types.shift() || defaultType;
     /**
-     * @type {*}
+     * @type {Tree}
      * @private
      */
-
-    this.root = new Type();
+    this.tree = new _tree["default"]();
     /**
-     * @type {Set<Object>}
+     * @type {Set<Item>}
      * @private
      */
 
@@ -99,87 +70,55 @@ var MultiDict = /*#__PURE__*/function () {
     key: "set",
 
     /**
+     * Set a value.
+     *
      * @param {...*} keys
      * @param {*} value
+     * @return {MultiDict}
      */
     value: function set() {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
+      for (var _len = arguments.length, keys = new Array(_len), _key = 0; _key < _len; _key++) {
+        keys[_key] = arguments[_key];
       }
 
-      if (args.length < 2) {
-        throw new TypeError('Specify at least one key and a value');
-      }
+      var value = keys.pop();
+      var oldItem = this.tree.get(keys); // Overwrite item
 
-      var _this$options2 = this.options,
-          types = _this$options2.types,
-          defaultType = _this$options2.defaultType;
-      var value = args.pop();
-      var lastKey = args.pop();
-      var level = this.root;
-      var nextLevel;
-
-      for (var _i = 0, _Object$entries = Object.entries(args); _i < _Object$entries.length; _i++) {
-        var _Object$entries$_i = (0, _slicedToArray2["default"])(_Object$entries[_i], 2),
-            index = _Object$entries$_i[0],
-            key = _Object$entries$_i[1];
-
-        nextLevel = _access["default"].get(level, key);
-
-        if (nextLevel === undefined) {
-          var Type = types[index] || defaultType;
-          nextLevel = new Type();
-
-          _access["default"].set(level, key, nextLevel);
-        }
-
-        level = nextLevel;
-      }
-
-      var prevValue = _access["default"].get(level, lastKey);
-
-      if (prevValue instanceof _item["default"]) {
-        prevValue.value = value;
+      if (oldItem) {
+        oldItem.value = value;
       } else {
-        var entry = new _item["default"](args, value);
-
-        _access["default"].set(level, lastKey, entry);
-
-        this.items.add(entry);
+        var newItem = new _item["default"](keys, value);
+        this.tree.set(keys, newItem);
+        this.items.add(newItem);
       }
 
       return this;
     }
     /**
+     * Get an entry or undefined if it wasn't added.
+     *
      * @param {...*} keys
-     * @return {*}
+     * @return {*|undefined}
      */
 
   }, {
     key: "get",
     value: function get() {
-      var level = this.root;
-
       for (var _len2 = arguments.length, keys = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
         keys[_key2] = arguments[_key2];
       }
 
-      for (var _i2 = 0, _keys = keys; _i2 < _keys.length; _i2++) {
-        var key = _keys[_i2];
-        level = _access["default"].get(level, key);
+      var item = this.tree.get(keys);
 
-        if (level === undefined) {
-          return undefined;
-        }
+      if (item === undefined) {
+        return undefined;
       }
 
-      if (level instanceof _item["default"]) {
-        return level.value;
-      }
-
-      return level;
+      return item.value;
     }
     /**
+     * Check if an entry exists. Always false for partial key paths.
+     *
      * @param {...*} keys
      * @return {boolean}
      */
@@ -187,26 +126,14 @@ var MultiDict = /*#__PURE__*/function () {
   }, {
     key: "has",
     value: function has() {
-      var level = this.root;
-
       for (var _len3 = arguments.length, keys = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
         keys[_key3] = arguments[_key3];
       }
 
-      for (var _i3 = 0, _keys2 = keys; _i3 < _keys2.length; _i3++) {
-        var key = _keys2[_i3];
-
-        if (!_access["default"].has(level, key)) {
-          return false;
-        }
-
-        level = _access["default"].get(level, key);
-      }
-
-      return true;
+      return this.tree.has(keys);
     }
     /**
-     * Delete an entry
+     * Delete an entry.
      *
      * @param {...*} keys
      * @return {boolean}
@@ -219,20 +146,14 @@ var MultiDict = /*#__PURE__*/function () {
         keys[_key4] = arguments[_key4];
       }
 
-      var lastKey = keys.pop();
-      var leaf = this.get(keys);
+      var item = this.tree.get(keys);
 
-      if (leaf === undefined) {
+      if (item === undefined) {
         return false;
       }
 
-      var lastValue = _access["default"].get(leaf, lastKey);
-
-      if (lastValue instanceof _item["default"]) {
-        this.items["delete"](lastValue);
-      }
-
-      return _access["default"]["delete"](leaf, lastKey);
+      this.items["delete"](item);
+      return this.tree["delete"](keys);
     }
     /**
      * Remove all entries
@@ -242,12 +163,13 @@ var MultiDict = /*#__PURE__*/function () {
     key: "clear",
     value: function clear() {
       this.items.clear();
-
-      _access["default"].clear(this.root);
+      this.tree.clear();
     }
     /**
+     * Get an iterator for each of the entries.
+     *
      * @generator
-     * @yield {[*, *]}
+     * @yield {[*[], *]}
      */
 
   }, {
@@ -303,8 +225,10 @@ var MultiDict = /*#__PURE__*/function () {
       }, value, this, [[1, 11, 14, 17]]);
     })
     /**
+     * Get an iterator for each of the entries.
+     *
      * @generator
-     * @yield {[*, *]}
+     * @yield {[*[], *]}
      */
 
   }, {
@@ -360,8 +284,10 @@ var MultiDict = /*#__PURE__*/function () {
       }, entries, this, [[1, 11, 14, 17]]);
     })
     /**
+     * Get an iterator for each of the keys.
+     *
      * @generator
-     * @yield {*}
+     * @yield {*[]}
      */
 
   }, {
@@ -417,6 +343,8 @@ var MultiDict = /*#__PURE__*/function () {
       }, keys, this, [[1, 11, 14, 17]]);
     })
     /**
+     * Get an iterator for each of the values.
+     *
      * @generator
      * @yield {*}
      */
@@ -474,6 +402,8 @@ var MultiDict = /*#__PURE__*/function () {
       }, values, this, [[1, 11, 14, 17]]);
     })
     /**
+     * Call a callback for each of the registered entries.
+     *
      * @param {function(*, *[], this):undefined} callback
      * @param {*} thisArg Option 'this' context for the callback
      */
@@ -492,8 +422,11 @@ var MultiDict = /*#__PURE__*/function () {
 
       try {
         for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-          var entry = _step6.value;
-          callback.call(thisArg, entry.value, entry.key, this);
+          var _step6$value = (0, _slicedToArray2["default"])(_step6.value, 2),
+              _keys = _step6$value[0],
+              _value = _step6$value[1];
+
+          callback.call(thisArg, _value, _keys, this);
         }
       } catch (err) {
         _iterator6.e(err);
@@ -519,5 +452,4 @@ var MultiDict = /*#__PURE__*/function () {
   return MultiDict;
 }();
 
-var _default = MultiDict;
-exports["default"] = _default;
+exports["default"] = MultiDict;
