@@ -8,8 +8,8 @@ const defaultOptions = {
 
 class MultiDict {
   /**
-   * @param {Iterable.<[*, *]>|object} entries Iterable of [...keys, value]
-   *                                           entries, or the options object
+   * @param {Iterable|object} entries Iterable of [...keys, value]
+   *                                  entries, or the options object
    * @param {object} options
    * @param {Function} options.defaultType Constructor for the default type
    * @param {Function[]} options.types Array of constructors
@@ -63,6 +63,7 @@ class MultiDict {
   /**
    * @param {...*} keys
    * @param {*} value
+   * @return {MultiDict}
    */
   set(...args) {
     if (args.length < 2) {

@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports["default"] = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -13,7 +13,7 @@ var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/sli
 
 var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));
 
-var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread"));
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));
 
@@ -23,14 +23,22 @@ var _access = _interopRequireDefault(require("@teamawesome/access"));
 
 var _item = _interopRequireDefault(require("./item"));
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
 var defaultOptions = {
   defaultType: Map,
   types: []
 };
 
-var MultiDict =
-/*#__PURE__*/
-function () {
+var MultiDict = /*#__PURE__*/function () {
   /**
    * @param {Iterable.<[*, *]>|object} entries Iterable of [...keys, value]
    *                                           entries, or the options object
@@ -41,7 +49,7 @@ function () {
   function MultiDict() {
     var entries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    (0, _classCallCheck2.default)(this, MultiDict);
+    (0, _classCallCheck2["default"])(this, MultiDict);
 
     if (entries === null || entries === undefined) {
       entries = [];
@@ -50,7 +58,7 @@ function () {
       entries = [];
     }
 
-    this.options = (0, _objectSpread2.default)({}, defaultOptions, options);
+    this.options = _objectSpread(_objectSpread({}, defaultOptions), options);
     var _this$options = this.options,
         types = _this$options.types,
         defaultType = _this$options.defaultType;
@@ -67,28 +75,19 @@ function () {
      */
 
     this.items = new Set();
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+
+    var _iterator = _createForOfIteratorHelper(entries),
+        _step;
 
     try {
-      for (var _iterator = entries[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var entry = _step.value;
-        this.set.apply(this, (0, _toConsumableArray2.default)(entry));
+        this.set.apply(this, (0, _toConsumableArray2["default"])(entry));
       }
     } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
+      _iterator.e(err);
     } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator.return != null) {
-          _iterator.return();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
+      _iterator.f();
     }
   }
   /**
@@ -96,7 +95,7 @@ function () {
    */
 
 
-  (0, _createClass2.default)(MultiDict, [{
+  (0, _createClass2["default"])(MultiDict, [{
     key: "set",
 
     /**
@@ -120,33 +119,31 @@ function () {
       var level = this.root;
       var nextLevel;
 
-      var _arr = Object.entries(args);
+      for (var _i = 0, _Object$entries = Object.entries(args); _i < _Object$entries.length; _i++) {
+        var _Object$entries$_i = (0, _slicedToArray2["default"])(_Object$entries[_i], 2),
+            index = _Object$entries$_i[0],
+            key = _Object$entries$_i[1];
 
-      for (var _i = 0; _i < _arr.length; _i++) {
-        var _arr$_i = (0, _slicedToArray2.default)(_arr[_i], 2),
-            index = _arr$_i[0],
-            key = _arr$_i[1];
-
-        nextLevel = _access.default.get(level, key);
+        nextLevel = _access["default"].get(level, key);
 
         if (nextLevel === undefined) {
           var Type = types[index] || defaultType;
           nextLevel = new Type();
 
-          _access.default.set(level, key, nextLevel);
+          _access["default"].set(level, key, nextLevel);
         }
 
         level = nextLevel;
       }
 
-      var prevValue = _access.default.get(level, lastKey);
+      var prevValue = _access["default"].get(level, lastKey);
 
-      if (prevValue instanceof _item.default) {
+      if (prevValue instanceof _item["default"]) {
         prevValue.value = value;
       } else {
-        var entry = new _item.default(args, value);
+        var entry = new _item["default"](args, value);
 
-        _access.default.set(level, lastKey, entry);
+        _access["default"].set(level, lastKey, entry);
 
         this.items.add(entry);
       }
@@ -167,16 +164,16 @@ function () {
         keys[_key2] = arguments[_key2];
       }
 
-      for (var _i2 = 0; _i2 < keys.length; _i2++) {
-        var key = keys[_i2];
-        level = _access.default.get(level, key);
+      for (var _i2 = 0, _keys = keys; _i2 < _keys.length; _i2++) {
+        var key = _keys[_i2];
+        level = _access["default"].get(level, key);
 
         if (level === undefined) {
           return undefined;
         }
       }
 
-      if (level instanceof _item.default) {
+      if (level instanceof _item["default"]) {
         return level.value;
       }
 
@@ -196,14 +193,14 @@ function () {
         keys[_key3] = arguments[_key3];
       }
 
-      for (var _i3 = 0; _i3 < keys.length; _i3++) {
-        var key = keys[_i3];
+      for (var _i3 = 0, _keys2 = keys; _i3 < _keys2.length; _i3++) {
+        var key = _keys2[_i3];
 
-        if (!_access.default.has(level, key)) {
+        if (!_access["default"].has(level, key)) {
           return false;
         }
 
-        level = _access.default.get(level, key);
+        level = _access["default"].get(level, key);
       }
 
       return true;
@@ -229,13 +226,13 @@ function () {
         return false;
       }
 
-      var lastValue = _access.default.get(leaf, lastKey);
+      var lastValue = _access["default"].get(leaf, lastKey);
 
-      if (lastValue instanceof _item.default) {
-        this.items.delete(lastValue);
+      if (lastValue instanceof _item["default"]) {
+        this.items["delete"](lastValue);
       }
 
-      return _access.default.delete(leaf, lastKey);
+      return _access["default"]["delete"](leaf, lastKey);
     }
     /**
      * Remove all entries
@@ -246,7 +243,7 @@ function () {
     value: function clear() {
       this.items.clear();
 
-      _access.default.clear(this.root);
+      _access["default"].clear(this.root);
     }
     /**
      * @generator
@@ -255,76 +252,55 @@ function () {
 
   }, {
     key: Symbol.iterator,
-    value:
-    /*#__PURE__*/
-    _regenerator.default.mark(function value() {
-      var _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, entry;
+    value: /*#__PURE__*/_regenerator["default"].mark(function value() {
+      var _iterator2, _step2, entry;
 
-      return _regenerator.default.wrap(function value$(_context) {
+      return _regenerator["default"].wrap(function value$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _iteratorNormalCompletion2 = true;
-              _didIteratorError2 = false;
-              _iteratorError2 = undefined;
-              _context.prev = 3;
-              _iterator2 = this.items[Symbol.iterator]();
+              _iterator2 = _createForOfIteratorHelper(this.items);
+              _context.prev = 1;
 
-            case 5:
-              if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
-                _context.next = 12;
+              _iterator2.s();
+
+            case 3:
+              if ((_step2 = _iterator2.n()).done) {
+                _context.next = 9;
                 break;
               }
 
               entry = _step2.value;
-              _context.next = 9;
+              _context.next = 7;
               return [entry.keys, entry.value];
 
-            case 9:
-              _iteratorNormalCompletion2 = true;
-              _context.next = 5;
+            case 7:
+              _context.next = 3;
               break;
 
-            case 12:
-              _context.next = 18;
+            case 9:
+              _context.next = 14;
               break;
+
+            case 11:
+              _context.prev = 11;
+              _context.t0 = _context["catch"](1);
+
+              _iterator2.e(_context.t0);
 
             case 14:
               _context.prev = 14;
-              _context.t0 = _context["catch"](3);
-              _didIteratorError2 = true;
-              _iteratorError2 = _context.t0;
 
-            case 18:
-              _context.prev = 18;
-              _context.prev = 19;
+              _iterator2.f();
 
-              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-                _iterator2.return();
-              }
+              return _context.finish(14);
 
-            case 21:
-              _context.prev = 21;
-
-              if (!_didIteratorError2) {
-                _context.next = 24;
-                break;
-              }
-
-              throw _iteratorError2;
-
-            case 24:
-              return _context.finish(21);
-
-            case 25:
-              return _context.finish(18);
-
-            case 26:
+            case 17:
             case "end":
               return _context.stop();
           }
         }
-      }, value, this, [[3, 14, 18, 26], [19,, 21, 25]]);
+      }, value, this, [[1, 11, 14, 17]]);
     })
     /**
      * @generator
@@ -333,76 +309,55 @@ function () {
 
   }, {
     key: "entries",
-    value:
-    /*#__PURE__*/
-    _regenerator.default.mark(function entries() {
-      var _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, entry;
+    value: /*#__PURE__*/_regenerator["default"].mark(function entries() {
+      var _iterator3, _step3, entry;
 
-      return _regenerator.default.wrap(function entries$(_context2) {
+      return _regenerator["default"].wrap(function entries$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              _iteratorNormalCompletion3 = true;
-              _didIteratorError3 = false;
-              _iteratorError3 = undefined;
-              _context2.prev = 3;
-              _iterator3 = this.items[Symbol.iterator]();
+              _iterator3 = _createForOfIteratorHelper(this.items);
+              _context2.prev = 1;
 
-            case 5:
-              if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
-                _context2.next = 12;
+              _iterator3.s();
+
+            case 3:
+              if ((_step3 = _iterator3.n()).done) {
+                _context2.next = 9;
                 break;
               }
 
               entry = _step3.value;
-              _context2.next = 9;
+              _context2.next = 7;
               return [entry.keys, entry.value];
 
-            case 9:
-              _iteratorNormalCompletion3 = true;
-              _context2.next = 5;
+            case 7:
+              _context2.next = 3;
               break;
 
-            case 12:
-              _context2.next = 18;
+            case 9:
+              _context2.next = 14;
               break;
+
+            case 11:
+              _context2.prev = 11;
+              _context2.t0 = _context2["catch"](1);
+
+              _iterator3.e(_context2.t0);
 
             case 14:
               _context2.prev = 14;
-              _context2.t0 = _context2["catch"](3);
-              _didIteratorError3 = true;
-              _iteratorError3 = _context2.t0;
 
-            case 18:
-              _context2.prev = 18;
-              _context2.prev = 19;
+              _iterator3.f();
 
-              if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-                _iterator3.return();
-              }
+              return _context2.finish(14);
 
-            case 21:
-              _context2.prev = 21;
-
-              if (!_didIteratorError3) {
-                _context2.next = 24;
-                break;
-              }
-
-              throw _iteratorError3;
-
-            case 24:
-              return _context2.finish(21);
-
-            case 25:
-              return _context2.finish(18);
-
-            case 26:
+            case 17:
             case "end":
               return _context2.stop();
           }
         }
-      }, entries, this, [[3, 14, 18, 26], [19,, 21, 25]]);
+      }, entries, this, [[1, 11, 14, 17]]);
     })
     /**
      * @generator
@@ -411,76 +366,55 @@ function () {
 
   }, {
     key: "keys",
-    value:
-    /*#__PURE__*/
-    _regenerator.default.mark(function keys() {
-      var _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, entry;
+    value: /*#__PURE__*/_regenerator["default"].mark(function keys() {
+      var _iterator4, _step4, entry;
 
-      return _regenerator.default.wrap(function keys$(_context3) {
+      return _regenerator["default"].wrap(function keys$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
             case 0:
-              _iteratorNormalCompletion4 = true;
-              _didIteratorError4 = false;
-              _iteratorError4 = undefined;
-              _context3.prev = 3;
-              _iterator4 = this.items[Symbol.iterator]();
+              _iterator4 = _createForOfIteratorHelper(this.items);
+              _context3.prev = 1;
 
-            case 5:
-              if (_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done) {
-                _context3.next = 12;
+              _iterator4.s();
+
+            case 3:
+              if ((_step4 = _iterator4.n()).done) {
+                _context3.next = 9;
                 break;
               }
 
               entry = _step4.value;
-              _context3.next = 9;
+              _context3.next = 7;
               return entry.keys;
 
-            case 9:
-              _iteratorNormalCompletion4 = true;
-              _context3.next = 5;
+            case 7:
+              _context3.next = 3;
               break;
 
-            case 12:
-              _context3.next = 18;
+            case 9:
+              _context3.next = 14;
               break;
+
+            case 11:
+              _context3.prev = 11;
+              _context3.t0 = _context3["catch"](1);
+
+              _iterator4.e(_context3.t0);
 
             case 14:
               _context3.prev = 14;
-              _context3.t0 = _context3["catch"](3);
-              _didIteratorError4 = true;
-              _iteratorError4 = _context3.t0;
 
-            case 18:
-              _context3.prev = 18;
-              _context3.prev = 19;
+              _iterator4.f();
 
-              if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
-                _iterator4.return();
-              }
+              return _context3.finish(14);
 
-            case 21:
-              _context3.prev = 21;
-
-              if (!_didIteratorError4) {
-                _context3.next = 24;
-                break;
-              }
-
-              throw _iteratorError4;
-
-            case 24:
-              return _context3.finish(21);
-
-            case 25:
-              return _context3.finish(18);
-
-            case 26:
+            case 17:
             case "end":
               return _context3.stop();
           }
         }
-      }, keys, this, [[3, 14, 18, 26], [19,, 21, 25]]);
+      }, keys, this, [[1, 11, 14, 17]]);
     })
     /**
      * @generator
@@ -489,76 +423,55 @@ function () {
 
   }, {
     key: "values",
-    value:
-    /*#__PURE__*/
-    _regenerator.default.mark(function values() {
-      var _iteratorNormalCompletion5, _didIteratorError5, _iteratorError5, _iterator5, _step5, entry;
+    value: /*#__PURE__*/_regenerator["default"].mark(function values() {
+      var _iterator5, _step5, entry;
 
-      return _regenerator.default.wrap(function values$(_context4) {
+      return _regenerator["default"].wrap(function values$(_context4) {
         while (1) {
           switch (_context4.prev = _context4.next) {
             case 0:
-              _iteratorNormalCompletion5 = true;
-              _didIteratorError5 = false;
-              _iteratorError5 = undefined;
-              _context4.prev = 3;
-              _iterator5 = this.items[Symbol.iterator]();
+              _iterator5 = _createForOfIteratorHelper(this.items);
+              _context4.prev = 1;
 
-            case 5:
-              if (_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done) {
-                _context4.next = 12;
+              _iterator5.s();
+
+            case 3:
+              if ((_step5 = _iterator5.n()).done) {
+                _context4.next = 9;
                 break;
               }
 
               entry = _step5.value;
-              _context4.next = 9;
+              _context4.next = 7;
               return entry.value;
 
-            case 9:
-              _iteratorNormalCompletion5 = true;
-              _context4.next = 5;
+            case 7:
+              _context4.next = 3;
               break;
 
-            case 12:
-              _context4.next = 18;
+            case 9:
+              _context4.next = 14;
               break;
+
+            case 11:
+              _context4.prev = 11;
+              _context4.t0 = _context4["catch"](1);
+
+              _iterator5.e(_context4.t0);
 
             case 14:
               _context4.prev = 14;
-              _context4.t0 = _context4["catch"](3);
-              _didIteratorError5 = true;
-              _iteratorError5 = _context4.t0;
 
-            case 18:
-              _context4.prev = 18;
-              _context4.prev = 19;
+              _iterator5.f();
 
-              if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
-                _iterator5.return();
-              }
+              return _context4.finish(14);
 
-            case 21:
-              _context4.prev = 21;
-
-              if (!_didIteratorError5) {
-                _context4.next = 24;
-                break;
-              }
-
-              throw _iteratorError5;
-
-            case 24:
-              return _context4.finish(21);
-
-            case 25:
-              return _context4.finish(18);
-
-            case 26:
+            case 17:
             case "end":
               return _context4.stop();
           }
         }
-      }, values, this, [[3, 14, 18, 26], [19,, 21, 25]]);
+      }, values, this, [[1, 11, 14, 17]]);
     })
     /**
      * @param {function(*, *[], this):undefined} callback
@@ -574,28 +487,18 @@ function () {
         throw new TypeError("".concat(callback, " is not a function"));
       }
 
-      var _iteratorNormalCompletion6 = true;
-      var _didIteratorError6 = false;
-      var _iteratorError6 = undefined;
+      var _iterator6 = _createForOfIteratorHelper(this),
+          _step6;
 
       try {
-        for (var _iterator6 = this[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+        for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
           var entry = _step6.value;
           callback.call(thisArg, entry.value, entry.key, this);
         }
       } catch (err) {
-        _didIteratorError6 = true;
-        _iteratorError6 = err;
+        _iterator6.e(err);
       } finally {
-        try {
-          if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
-            _iterator6.return();
-          }
-        } finally {
-          if (_didIteratorError6) {
-            throw _iteratorError6;
-          }
-        }
+        _iterator6.f();
       }
     }
   }, {
@@ -617,4 +520,4 @@ function () {
 }();
 
 var _default = MultiDict;
-exports.default = _default;
+exports["default"] = _default;
