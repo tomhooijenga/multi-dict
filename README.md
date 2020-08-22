@@ -17,7 +17,6 @@ the dict.
 ```
 new Dict([ /* Entries */ ], { /* Options */ });
 new Dict([ /* Entries */ ]);
-new Dict({ /* Options */ });
 ```
 ## Options
 By default, for each level of the dict a Map is used. However, you can specify a type for each level and/or a 
@@ -38,17 +37,25 @@ new MultiDict({
 ```
 
 ## Methods
-* `get(...keys)` Get a value by it's path
+* `get(...keys)` Get a value by its path
 * `set(...keys, value)` Set a value by a path of keys
 * `has(...keys)` Check if a path of keys exists
 * `delete(...keys)` Delete a path of keys
-* `clear` Remove all entries in the dict
+* `clear()` Remove all entries in the dict
 * `forEach(callback, thisArg)` Run a callback for each entry of the dict
 ```
 dict.set(key1, key2, value);
 dict.get(key1, key2); // => value
 ```
-It's possible to get/set/delete a sub-level of the dictionary by omitting the last key(s) from a path.
+```
+dict.set(key1, key2, key3, value);
+dict.get(key1, key2, key3); // => value
+dict.has(key1, key2, key3); // => true
+
+// Only values that have been set before can be retrieved.
+dict.has(key1, key2); // false!
+dict.get(key1, key2); // => undefined!
+```
 
 ## Iterable methods:
 * `keys` Get an iterable yielding all the paths of the dict 
@@ -56,10 +63,12 @@ It's possible to get/set/delete a sub-level of the dictionary by omitting the la
 * `entries` Get an iterable yielding all the paths and values of the dict
 * `Symbol.iterator` Get an iterable yielding all the paths and values of the dict
 ```
-for (const key of dict.keys())
-
-for (const [key, value] of dict)
+for (const keys of dict.keys())
+for (const value of dict.values())
+for (const [keys, value] of dict.values())
+for (const [keys, value] of dict)
 ```
+
 ## Properties
 * `size` The amount of entries in the dictionary
 
