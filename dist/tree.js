@@ -159,9 +159,8 @@ var Tree = /*#__PURE__*/function () {
     value: function createNode() {
       var depth = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       var _this$options = this.options,
-          defaultType = _this$options.defaultType,
-          types = _this$options.types; // Offset by 1 to account for the root.
-
+          types = _this$options.types,
+          defaultType = _this$options.defaultType;
       var Type = types[depth] || defaultType;
       return new Type();
     }

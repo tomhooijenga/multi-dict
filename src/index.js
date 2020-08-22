@@ -36,6 +36,7 @@ export default class MultiDict {
   /**
    * @return {string}
    */
+  // eslint-disable-next-line class-methods-use-this
   get [Symbol.toStringTag]() {
     return 'MultiDict';
   }

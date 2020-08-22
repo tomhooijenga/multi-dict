@@ -446,6 +446,7 @@ var MultiDict = /*#__PURE__*/function () {
     /**
      * @return {string}
      */
+    // eslint-disable-next-line class-methods-use-this
 
   }, {
     key: Symbol.toStringTag,
