@@ -117,6 +117,35 @@ export default class MultiDict {
   }
 
   /**
+   * Create a new dictionary from the given level.
+   *
+   * @param {...*} keys
+   * @returns {MultiDict}
+   */
+  level(...keys) {
+    if (this.tree.get(keys, false) === undefined) {
+      throw new Error('Cannot create dictionary from non-existing level.');
+    }
+
+    const { defaultType, types } = this.tree.options;
+    const dict = new MultiDict([], {
+      defaultType,
+      types: types.slice(keys.length),
+    });
+
+    const indexedItems = new Map(
+      [...this.items].map((item, index) => [item, index]),
+    );
+    this.tree.level(keys)
+      .sort((a, b) => indexedItems.get(a) - indexedItems.get(b))
+      .forEach((item) => {
+        dict.set(...item.keys.slice(keys.length), item.value);
+      });
+
+    return dict;
+  }
+
+  /**
    * Get an iterator for each of the entries.
    *
    * @generator

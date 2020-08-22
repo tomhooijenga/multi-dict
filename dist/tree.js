@@ -126,6 +126,38 @@ var Tree = /*#__PURE__*/function () {
     value: function clear() {
       _access["default"].clear(this.root);
     }
+  }, {
+    key: "level",
+    value: function level(keys) {
+      var node = this.get(keys, false);
+      var entries = [];
+
+      var walker = function walker(level) {
+        var _iterator3 = _createForOfIteratorHelper(_access["default"].entries(level)),
+            _step3;
+
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var _step3$value = (0, _slicedToArray2["default"])(_step3.value, 2),
+                key = _step3$value[0],
+                value = _step3$value[1];
+
+            if (key === LEAF) {
+              entries.push(value);
+            } else {
+              walker(_access["default"].get(level, key));
+            }
+          }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
+        }
+      };
+
+      walker(node, []);
+      return entries;
+    }
     /**
      * Create a tree node.
      * @private

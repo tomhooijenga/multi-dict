@@ -215,3 +215,28 @@ it('default + specific tree type', () => {
   dict.tree.root[0].should.be.Object().and.not.be.Array();
   dict.tree.root[0][0].should.be.Object().and.not.be.Array();
 });
+
+it('level', () => {
+  const dict1 = new Dict([
+    ['a', 'b1', 'c', '3'],
+    ['a', 'b1', '1'],
+    ['a', 'b2', '2'],
+  ]);
+
+  (() => dict1.level('nope')).should.throw();
+
+  const dict2 = dict1.level('a');
+
+  dict2.should.be.instanceof(Dict);
+  dict2.size.should.equal(3);
+  [...dict2].should.eql([
+    [['b1', 'c'], '3'],
+    [['b1'], '1'],
+    [['b2'], '2'],
+  ]);
+
+  const dict3 = dict1.level('a', 'b1');
+  dict3.size.should.equal(2);
+  dict3.get().should.equal('1');
+  dict3.get('c').should.equal('3');
+});

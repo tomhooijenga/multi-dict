@@ -69,6 +69,24 @@ export default class Tree {
     access.clear(this.root);
   }
 
+  level(keys) {
+    const node = this.get(keys, false);
+    const entries = [];
+    const walker = (level) => {
+      for (const [key, value] of access.entries(level)) {
+        if (key === LEAF) {
+          entries.push(value);
+        } else {
+          walker(access.get(level, key));
+        }
+      }
+    };
+
+    walker(node, []);
+
+    return entries;
+  }
+
   /**
    * Create a tree node.
    * @private

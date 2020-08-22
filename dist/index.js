@@ -170,6 +170,41 @@ var MultiDict = /*#__PURE__*/function () {
       this.tree.clear();
     }
     /**
+     * Create a new dictionary from the given level.
+     *
+     * @param {...*} keys
+     * @returns {MultiDict}
+     */
+
+  }, {
+    key: "level",
+    value: function level() {
+      for (var _len5 = arguments.length, keys = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+        keys[_key5] = arguments[_key5];
+      }
+
+      if (this.tree.get(keys, false) === undefined) {
+        throw new Error('Cannot create dictionary from non-existing level.');
+      }
+
+      var _this$tree$options = this.tree.options,
+          defaultType = _this$tree$options.defaultType,
+          types = _this$tree$options.types;
+      var dict = new MultiDict([], {
+        defaultType: defaultType,
+        types: types.slice(keys.length)
+      });
+      var indexedItems = new Map((0, _toConsumableArray2["default"])(this.items).map(function (item, index) {
+        return [item, index];
+      }));
+      this.tree.level(keys).sort(function (a, b) {
+        return indexedItems.get(a) - indexedItems.get(b);
+      }).forEach(function (item) {
+        dict.set.apply(dict, (0, _toConsumableArray2["default"])(item.keys.slice(keys.length)).concat([item.value]));
+      });
+      return dict;
+    }
+    /**
      * Get an iterator for each of the entries.
      *
      * @generator
