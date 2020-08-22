@@ -41,6 +41,14 @@ it('get set', () => {
   dict.has('a', 'b').should.be.true();
 });
 
+it('get set no key', () => {
+  const dict = new Dict();
+  dict.set('value').should.equal(dict);
+  dict.size.should.be.equal(1);
+  dict.get().should.equal('value');
+  dict.has().should.be.true();
+});
+
 it('overwrite', () => {
   const dict = new Dict();
   dict.set('a', 'b', 'value').should.equal(dict);

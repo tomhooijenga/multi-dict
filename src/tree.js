@@ -12,7 +12,12 @@ export default class Tree {
     this.root = this.createNode(0);
   }
 
-  get(keys) {
+  /**
+   * @param {Array} keys
+   * @param {boolean} value - True to return the value at this level, false for the node.
+   * @return {*|undefined}
+   */
+  get(keys, value = true) {
     let node = this.root;
 
     for (const key of keys) {
@@ -23,7 +28,7 @@ export default class Tree {
       }
     }
 
-    return access.get(node, LEAF);
+    return value ? access.get(node, LEAF) : node;
   }
 
   set(keys, value) {
@@ -41,28 +46,20 @@ export default class Tree {
   }
 
   has(keys) {
-    let node = this.root;
+    const node = this.get(keys, false);
 
-    for (const key of keys) {
-      node = access.get(node, key);
-
-      if (node === undefined) {
-        return false;
-      }
+    if (node === undefined) {
+      return false;
     }
 
     return access.has(node, LEAF);
   }
 
   delete(keys) {
-    let node = this.root;
+    const node = this.get(keys, false);
 
-    for (const key of keys) {
-      node = access.get(node, key);
-
-      if (node === undefined) {
-        return false;
-      }
+    if (node === undefined) {
+      return false;
     }
 
     return access.delete(node, LEAF);

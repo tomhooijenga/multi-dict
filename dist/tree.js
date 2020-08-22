@@ -38,10 +38,17 @@ var Tree = /*#__PURE__*/function () {
     }, options);
     this.root = this.createNode(0);
   }
+  /**
+   * @param {Array} keys
+   * @param {boolean} value - True to return the value at this level, false for the node.
+   * @return {*|undefined}
+   */
+
 
   (0, _createClass2["default"])(Tree, [{
     key: "get",
     value: function get(keys) {
+      var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
       var node = this.root;
 
       var _iterator = _createForOfIteratorHelper(keys),
@@ -62,7 +69,7 @@ var Tree = /*#__PURE__*/function () {
         _iterator.f();
       }
 
-      return _access["default"].get(node, LEAF);
+      return value ? _access["default"].get(node, LEAF) : node;
     }
   }, {
     key: "set",
@@ -95,24 +102,10 @@ var Tree = /*#__PURE__*/function () {
   }, {
     key: "has",
     value: function has(keys) {
-      var node = this.root;
+      var node = this.get(keys, false);
 
-      var _iterator3 = _createForOfIteratorHelper(keys),
-          _step3;
-
-      try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var key = _step3.value;
-          node = _access["default"].get(node, key);
-
-          if (node === undefined) {
-            return false;
-          }
-        }
-      } catch (err) {
-        _iterator3.e(err);
-      } finally {
-        _iterator3.f();
+      if (node === undefined) {
+        return false;
       }
 
       return _access["default"].has(node, LEAF);
@@ -120,24 +113,10 @@ var Tree = /*#__PURE__*/function () {
   }, {
     key: "delete",
     value: function _delete(keys) {
-      var node = this.root;
+      var node = this.get(keys, false);
 
-      var _iterator4 = _createForOfIteratorHelper(keys),
-          _step4;
-
-      try {
-        for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-          var key = _step4.value;
-          node = _access["default"].get(node, key);
-
-          if (node === undefined) {
-            return false;
-          }
-        }
-      } catch (err) {
-        _iterator4.e(err);
-      } finally {
-        _iterator4.f();
+      if (node === undefined) {
+        return false;
       }
 
       return _access["default"]["delete"](node, LEAF);
