@@ -158,3 +158,52 @@ it('forEach scoped', () => {
   cb.getCall(0).should.be.calledWith('3', ['a', 'b', 'c'], dict);
   cb.getCall(1).should.be.calledWith('1', ['a', 'a'], dict);
 });
+
+it('default tree type', () => {
+  const dict = new Dict([], {
+    defaultType: Array,
+  });
+
+  dict.set(0, 0, 'value');
+  dict.has(0, 0).should.be.true();
+  dict.get(0, 0).should.be.equal('value');
+
+  dict.tree.options.should.eql({ defaultType: Array, types: [] });
+  dict.tree.root.should.be.Array();
+  dict.tree.root[0].should.be.Array();
+  dict.tree.root[0][0].should.be.Array();
+});
+
+it('specific tree type', () => {
+  const dict = new Dict([], {
+    defaultType: null,
+    types: [Array, Array, Array],
+  });
+
+  dict.set(0, 0, 'value');
+  dict.has(0, 0).should.be.true();
+  dict.get(0, 0).should.be.equal('value');
+
+  dict.tree.options.should.eql({ defaultType: null, types: [Array, Array, Array] });
+  dict.tree.root.should.be.Array();
+  dict.tree.root[0].should.be.Array();
+  dict.tree.root[0][0].should.be.Array();
+
+  (() => dict.set(0, 0, 0, 'value')).should.throw();
+});
+
+it('default + specific tree type', () => {
+  const dict = new Dict([], {
+    defaultType: Object,
+    types: [Array],
+  });
+
+  dict.set(0, 0, 'value');
+  dict.has(0, 0).should.be.true();
+  dict.get(0, 0).should.be.equal('value');
+
+  dict.tree.options.should.eql({ defaultType: Object, types: [Array] });
+  dict.tree.root.should.be.Array();
+  dict.tree.root[0].should.be.Object().and.not.be.Array();
+  dict.tree.root[0][0].should.be.Object().and.not.be.Array();
+});

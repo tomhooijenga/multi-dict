@@ -30,16 +30,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var MultiDict = /*#__PURE__*/function () {
   /**
    * @param {Iterable|object} entries Iterable of [...keys, value] entries.
+   * @param {Object} options
+   * @param {Function} options.defaultType
+   * @param {Function[]} options.types
    */
   function MultiDict() {
     var entries = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     (0, _classCallCheck2["default"])(this, MultiDict);
 
     /**
      * @type {Tree}
      * @private
      */
-    this.tree = new _tree["default"]();
+    this.tree = new _tree["default"](options);
     /**
      * @type {Set<Item>}
      * @private

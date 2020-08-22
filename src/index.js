@@ -4,13 +4,16 @@ import Tree from './tree';
 export default class MultiDict {
   /**
    * @param {Iterable|object} entries Iterable of [...keys, value] entries.
+   * @param {Object} options
+   * @param {Function} options.defaultType
+   * @param {Function[]} options.types
    */
-  constructor(entries = []) {
+  constructor(entries = [], options = {}) {
     /**
      * @type {Tree}
      * @private
      */
-    this.tree = new Tree();
+    this.tree = new Tree(options);
 
     /**
      * @type {Set<Item>}
