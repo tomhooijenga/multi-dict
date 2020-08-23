@@ -26,13 +26,13 @@ default type.
 * `types` Array of constructors, for each depth that should be specified.
 ```js
 // Each level of the dict will be an array
-new MultiDict({
+new Dictionary({
   defaultType: Array
 });
 
 // The first level will be an Object, the second an Array.
 // The third and deeper levels will be the default type.
-new MultiDict({
+new Dictionary({
   types: [Object, Array]
 });
 ```
