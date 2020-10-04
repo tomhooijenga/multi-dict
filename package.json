@@ -1,44 +1,44 @@
 {
-  "name": "@teamawesome/multi-dict",
-  "version": "2.0.1",
-  "description": "",
-  "main": "dist/index.js",
-  "scripts": {
-    "build": "babel src --out-dir dist",
-    "dev": "babel src --out-dir dist --watch --source-maps inline",
-    "lint": "eslint src/",
-    "test": "mocha",
-    "prepublishOnly": "npm run-script lint && npm run-script test && npm run-script build"
-  },
-  "author": "Tom Hooijenga <tomhooijenga@gmail.com>",
-  "homepage": "https://github.com/tomhooijenga/multi-dict",
-  "license": "MIT",
-  "keywords": [
-    "dict",
-    "dictionary",
-    "multiple",
-    "cache",
-    "store",
-    "complex",
-    "trie",
-    "triemap"
-  ],
-  "devDependencies": {
-    "@babel/cli": "^7.10.5",
-    "@babel/core": "^7.11.1",
-    "@babel/plugin-transform-runtime": "^7.11.0",
-    "@babel/preset-env": "^7.11.0",
-    "eslint": "^7.7.0",
-    "eslint-config-airbnb-base": "^14.2.0",
-    "eslint-plugin-import": "^2.22.0",
-    "mocha": "^8.1.1",
-    "should": "^13.2.3",
-    "should-sinon": "0.0.6",
-    "sinon": "^9.0.3"
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.11.2",
-    "@teamawesome/access": "^1.0.7"
-  },
-  "types": "./multiDict.d.ts"
+	"name": "@teamawesome/multi-dict",
+	"version": "2.0.1",
+	"description": "",
+	"main": "dist/index.js",
+	"scripts": {
+		"build": "babel src --out-dir dist",
+		"dev": "babel src --out-dir dist --watch --source-maps inline",
+		"lint": "eslint src/",
+		"test": "mocha",
+		"prepublishOnly": "npm run-script lint && npm run-script test && npm run-script build"
+	},
+	"author": "Tom Hooijenga <tomhooijenga@gmail.com>",
+	"homepage": "https://github.com/tomhooijenga/multi-dict",
+	"license": "MIT",
+	"keywords": [
+		"dict",
+		"dictionary",
+		"multiple",
+		"cache",
+		"store",
+		"complex",
+		"trie",
+		"triemap"
+	],
+	"devDependencies": {
+		"@babel/cli": "^7.10.5",
+		"@babel/core": "^7.11.1",
+		"@babel/plugin-transform-runtime": "^7.11.0",
+		"@babel/preset-env": "^7.11.0",
+		"eslint": "^7.7.0",
+		"eslint-config-airbnb-base": "^14.2.0",
+		"eslint-plugin-import": "^2.22.0",
+		"mocha": "^8.1.1",
+		"should": "^13.2.3",
+		"should-sinon": "0.0.6",
+		"sinon": "^9.0.3"
+	},
+	"dependencies": {
+		"@babel/runtime": "^7.11.2",
+		"@teamawesome/access": "^1.0.7"
+	},
+	"types": "./multi-dict.d.ts"
 }
