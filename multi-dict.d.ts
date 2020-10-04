@@ -45,7 +45,7 @@ export default class MultiDict<
 	 * @param entries Iterable of [...keys, value] entries.
 	 * @param options
 	 */
-	constructor(entries: [...Keys, Val][], options?: TreeOptions<DType, Types>)
+	constructor(entries?: [...Keys, Val][], options?: TreeOptions<DType, Types>)
 	get size(): number
 	get [Symbol.toStringTag](): "MultiDict"
 	set(...keysAndValue: [...Keys, Val]): this
@@ -96,7 +96,7 @@ export default class MultiDict<
 	 * Call a callback for each of the registered entries.
 	 *
 	 * @param callback
-	 * @param thisArg Option 'this' context for the callback
+	 * @param thisArg Optional 'this' context for the callback
 	 */
 	forEach<ThisArg>(
 		callback: (this: ThisArg, key: Keys, val: Val, thisArg: this) => void,
