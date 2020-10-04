@@ -99,7 +99,7 @@ export default class MultiDict<
 	 * @param thisArg Optional 'this' context for the callback
 	 */
 	forEach<ThisArg>(
-		callback: (this: ThisArg, key: Keys, val: Val, thisArg: this) => void,
+		callback: (this: ThisArg, key: Keys, val: Val, dict: this) => void,
 		thisArg: ThisArg
 	): void
 }
