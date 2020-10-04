@@ -3,7 +3,7 @@ type GenericConstructor = new (...args: unknown[]) => object
 interface TreeOptions<
 	DType extends GenericConstructor,
 	Types extends GenericConstructor[]
-> {
+	> {
 	defaultType?: DType
 	types?: Types
 }
@@ -13,7 +13,7 @@ declare class Tree<
 	Val,
 	DType extends GenericConstructor = typeof Map,
 	Types extends GenericConstructor[] = []
-> {
+	> {
 	private root: DType
 	public options: TreeOptions<DType, Types>
 	constructor(options: TreeOptions<DType, Types>)
@@ -38,7 +38,7 @@ export default class MultiDict<
 	Val,
 	DType extends GenericConstructor = typeof Map,
 	Types extends GenericConstructor[] = []
-> {
+	> {
 	private tree: Tree<Keys, Val, DType, Types>
 	private items: Set<Item<Keys, Val>>
 	/**
@@ -65,9 +65,9 @@ export default class MultiDict<
 	/**
 	 * Create a new dictionary from the given level.
 	 */
-	level<Newkeys extends any[]>(
+	level<NewKeys extends any[]>(
 		...keys: Keys
-	): MultiDict<Newkeys, Val, DType, Types>
+	): MultiDict<NewKeys, Val, DType, Types>
 	/**
 	 * Get an iterator for each of the entries.
 	 *
