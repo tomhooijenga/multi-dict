@@ -23,8 +23,8 @@ declare class Tree<
 	set(keys: Keys, value: Val): void
 	has(keys: Keys): boolean
 	clear(): void
-	level(keys: Keys): Object[]
-	private createNode(depth: number): Object
+	level(keys: Keys): Item<Keys, Val>[]
+	private createNode(depth: number): DType | Types[number]
 }
 
 declare class Item<Keys extends any[], Val> {
