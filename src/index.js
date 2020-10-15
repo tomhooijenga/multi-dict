@@ -197,7 +197,7 @@ export default class MultiDict {
    * Call a callback for each of the registered entries.
    *
    * @param {function(*, *[], this):undefined} callback
-   * @param {*} thisArg Option 'this' context for the callback
+   * @param {*} thisArg Optional 'this' context for the callback
    */
   forEach(callback, thisArg = undefined) {
     if (typeof callback !== 'function') {

@@ -39,5 +39,6 @@
   "dependencies": {
     "@babel/runtime": "^7.11.2",
     "@teamawesome/access": "^1.0.7"
-  }
+  },
+  "types": "./multi-dict.d.ts"
 }
