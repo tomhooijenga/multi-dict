@@ -444,7 +444,7 @@ var MultiDict = /*#__PURE__*/function () {
      * Call a callback for each of the registered entries.
      *
      * @param {function(*, *[], this):undefined} callback
-     * @param {*} thisArg Option 'this' context for the callback
+     * @param {*} thisArg Optional 'this' context for the callback
      */
 
   }, {
