@@ -1,6 +1,6 @@
 {
   "name": "@teamawesome/multi-dict",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "dev": "babel src --out-dir dist --watch --source-maps inline",
     "lint": "eslint src/",
     "test": "mocha",
-    "prepublishOnly": "npm run-script lint && npm run-script test && npm run-script build"
+    "prepublishOnly": "npm run lint && npm run build && npm run test "
   },
   "author": "Tom Hooijenga <tomhooijenga@gmail.com>",
   "homepage": "https://github.com/tomhooijenga/multi-dict",
